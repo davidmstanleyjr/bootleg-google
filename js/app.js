@@ -2,14 +2,15 @@ import {
 	setSearchFocus,
 	showClearTextButton,
 	clearSearchText,
-} from "./searchBar";
+	clearPushListener,
+} from "./searchBar.js";
 import {
 	deleteSearchResults,
 	buildSearchResults,
 	clearStatsLine,
 	setStatsLine,
-} from "./searchResults";
-import { getSearchTerm } from "./dataFunctions";
+} from "./searchResults.js";
+import { getSearchTerm, getSearchResults } from "./dataFunctions.js";
 
 document.addEventListener("readystatechange", (event) => {
 	if (event.target.readyState === "complete") {
@@ -24,24 +25,25 @@ const initApp = () => {
 	search.addEventListener("input", showClearTextButton);
 	const clear = document.getElementById("clear");
 	clear.addEventListener("click", clearSearchText);
+	clear.addEventListener("keydown", clearPushListener);
 	const form = document.getElementById("searchBar");
-	form.addEventListener("submit", submitTheSearch);
+	form.addEventListener("submit", submitSearch);
 };
 
 //prevents form from refreshing the page
-const submitTheSearch = (event) => {
+const submitSearch = (event) => {
 	event.preventDefault();
 	deleteSearchResults();
-	processTheSearch();
+	processSearch();
 	setSearchFocus();
 };
 
 //async function for the wiki api
-const processTheSearch = async () => {
+const processSearch = async () => {
 	clearStatsLine();
 	const searchTerm = getSearchTerm();
 	if (searchTerm === "") return;
-	const resultArray = await retrieveSearchResults(searchTerm);
+	const resultArray = await getSearchResults(searchTerm);
 	if (resultArray.length) buildSearchResults(resultArray);
 	setStatsLine(resultArray.length);
 };

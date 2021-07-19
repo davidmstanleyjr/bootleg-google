@@ -23,6 +23,7 @@ export const clearSearchText = (event) => {
 	setSearchFocus();
 };
 
+//clear the listener for button key events
 export const clearPushListener = (event) => {
 	if (event.key === "Enter" || event.key === " ") {
 		event.preventDefault();

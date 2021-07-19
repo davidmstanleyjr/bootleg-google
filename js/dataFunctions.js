@@ -1,16 +1,16 @@
 export const getSearchTerm = () => {
-	const rawSearchTerm = document.getElementById('search').value.trim();
+	const rawSearchTerm = document.getElementById("search").value.trim();
 	// looks for multiple spaces in a row within the search term
-	const regex = /[]{2,}/gi;
-	const searchTerm = rawSearchTerm.replaceALl(regex, '');
+	const regex = /[ ]{2,}/gi;
+	const searchTerm = rawSearchTerm.replaceAll(regex, " ");
 	return searchTerm;
 };
 
-export const retrieveSearchResults = async (searchTerm) => {
+export const getSearchResults = async (searchTerm) => {
 	const wikiSearchString = getWikiSearchString(searchTerm);
 	const wikiSearchResults = await requestData(wikiSearchString);
 	let resultArray = [];
-	if (wikiSearchResults.hasOwnProperty('query')) {
+	if (wikiSearchResults.hasOwnProperty("query")) {
 		resultArray = processWikiResults(wikiSearchResults.query.pages);
 	}
 	return resultArray;
@@ -18,10 +18,7 @@ export const retrieveSearchResults = async (searchTerm) => {
 
 const getWikiSearchString = (searchTerm) => {
 	const maxChars = getMaxChars();
-	const rawSearchString = `https://en.wikipedia.org/w/api.php?action=query&
-    generator=search&gsrsearch=${searchTerm}&gsrlimit=20&prop=pageimages|
-    extracts&exchars=${maxChars}&exintro&explaintext&exlimit=max&format=json&
-    origin=*`;
+	const rawSearchString = `https://en.wikipedia.org/w/api.php?action=query&generator=search&gsrsearch=${searchTerm}&gsrlimit=20&prop=pageimages|extracts&exchars=${maxChars}&exintro&explaintext&exlimit=max&format=json&origin=*`;
 	const searchString = encodeURI(rawSearchString);
 	return searchString;
 };
@@ -41,7 +38,7 @@ const requestData = async (searchString) => {
 		const data = await response.json();
 		return data;
 	} catch (err) {
-		console.log(err);
+		console.error(err);
 	}
 };
 
@@ -51,12 +48,14 @@ const processWikiResults = (results) => {
 		const id = key;
 		const title = results[key].title;
 		const text = results[key].extract;
-		const img = results[key].hasOwnProperty('thumbnail') ? results[key].thumbnail.source : null;
+		const img = results[key].hasOwnProperty("thumbnail")
+			? results[key].thumbnail.source
+			: null;
 		const item = {
-			id    : id,
-			title : title,
-			img   : img,
-			text  : text
+			id: id,
+			title: title,
+			img: img,
+			text: text,
 		};
 		resultArray.push(item);
 	});

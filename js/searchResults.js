@@ -7,6 +7,7 @@ export const deleteSearchResults = () => {
 	}
 };
 
+//search result info starts here. All the other result functions don't work without this one.
 export const buildSearchResults = (resultArray) => {
 	resultArray.forEach((result) => {
 		const resultItem = createResultItem(result);
@@ -64,10 +65,10 @@ export const clearStatsLine = () => {
 };
 
 export const setStatsLine = (numberOfResults) => {
-	const statsLine = document.getElementById("stats");
+	const statLine = document.getElementById("stats");
 	if (numberOfResults) {
-		statsLine.textContent = `Displaying ${numberOfResults} results.`;
+		statLine.textContent = `Displaying ${numberOfResults} results.`;
 	} else {
-		statsLine.textContent = "Sorry, no results.";
+		statLine.textContent = "Sorry, no results.";
 	}
 };
