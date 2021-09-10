@@ -21,6 +21,10 @@ $font-stack: "Josefin Sans", sans-serif;
 	align-items: center;
 }
 
+
+
+
+
 @mixin flexColumn {
 	@extend %flex;
 	flex-direction: column;
